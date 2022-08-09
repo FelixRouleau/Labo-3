@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.Map.Entry;
+
 import javax.swing.*;
 import java.io.*;
 import java.awt.*;
@@ -142,7 +144,7 @@ public class Main {
         Avion avionPrive = new Avion("Cessna Caravan", 14, 1, 0);
         Avion avionRegulierCourrierCourt = new Avion("Boeing 737 MAX 8", 210, 0, 2); // Avion pour la courte distance
 
-        // ajout des avions a l'arrayList flotteCompagnie
+        // ajout des avions a l'ArrayList flotteCompagnie
         flotteCompagnie.add(avionBasPrix);
         flotteCompagnie.add(avionRegulier);
         flotteCompagnie.add(avionCharter);
@@ -151,7 +153,7 @@ public class Main {
     }
 
     public static void afficherEntete() {
-        sortie = new JTextArea(20, 80);
+        sortie = new JTextArea(30, 80);
         sortie.setFont(new Font("monospace", Font.PLAIN, 12));
         sortie.append("\t\tLISTE DES VOLS\n\n");
         sortie.append("# VOL\tDESTINATION\t\tDÉPART\tNOMBRE DE RÉSERVATIONS\n\n");
@@ -161,6 +163,7 @@ public class Main {
     public static int nbVols;
 
     public static void listerVols() {
+        JScrollPane scrollPane = new JScrollPane();
         int choix;
 
         String msg = "Sélectionner comment vous voulez afficher les vols\n";
@@ -176,7 +179,12 @@ public class Main {
             case 1:
                 sortie = new JTextArea();
                 listerTout();
+                if(listeMapVols.size() > 5){
+                    scrollPane.setViewportView(sortie);
+                    JOptionPane.showMessageDialog(null, scrollPane, null, JOptionPane.PLAIN_MESSAGE);
+                }else {
                 JOptionPane.showMessageDialog(null, sortie, null, JOptionPane.PLAIN_MESSAGE);
+                }
                 break;
             
             case 2:
@@ -200,21 +208,24 @@ public class Main {
             case 5:
                 sortie = new JTextArea();
                 listerPrive();
-                JOptionPane.showMessageDialog(null, sortie, null, JOptionPane.PLAIN_MESSAGE);
+                    // scrollPane.setViewportView(sortie);
+                    // JOptionPane.showMessageDialog(null, scrollPane, null, JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(null, sortie, null, JOptionPane.PLAIN_MESSAGE);
                 break;
             
             case 6:
-            break;
+                break;
 
             default :
                 afficherMsg("Choix invalide", "Erreur");
+                break;
             
             
         }
     }while(choix !=6);
     }
 
-    //Méthodes pour rechercher un vol avec son numéro qui est aussi la clé du HashMap
+    //Méthodes pour rechercher un vol avec son numéro de vol qui est aussi la clé du HashMap
 
     public static boolean rechercherVol(int numVol) {
         boolean keyExist = false;
@@ -230,10 +241,12 @@ public class Main {
     // Début des méthodes pour lister tout les types de vols
 
     public static void listerTout() {
+        TreeMap<Integer, Vol> listHashMapTrie = new TreeMap<>(listeMapVols); // Convert HashMap to TreeMap
+        Set<Entry<Integer, Vol>> mappings = listHashMapTrie.entrySet(); // Returns the ordered TreeMap too a Set (So no duplicate) in ascending order
         nbVols = 0;
         afficherEntete();
-            for (Integer cle : listeMapVols.keySet()) {
-                    sortie.append(listeMapVols.get(cle).toString());
+            for (Entry<Integer, Vol> mapping : mappings) {
+                    sortie.append(mapping.getValue().toString());
                     nbVols++;
             }
             sortie.append("Nombre de vols = " + nbVols);
@@ -286,6 +299,7 @@ public class Main {
                 }
             }
             sortie.append("Nombre de vols = " + nbVols);
+            
     }
 
     // Fin des méthodes pour lister les vols
@@ -347,22 +361,27 @@ public class Main {
                 case 2:
                     option = JOptionPane.showConfirmDialog(null, message, "AJOUT D'UN VOL", JOptionPane.OK_CANCEL_OPTION);
                     if(option == JOptionPane.OK_OPTION){
+                        // Random un type d'avion régulier pour le vol régulier. Soit l'index 1 ou 4 du ArrayList flotteCompagnie
+                        Random r = new Random();
+                        int[] randomRegularFlight = new int[] {1, 4};
+                        int indexAvion = r.nextInt(randomRegularFlight.length);
+
                         Date dateDepart = new Date(Integer.parseInt(jour.getText()), Integer.parseInt(mois.getText()), Integer.parseInt(annee.getText()));
-                        listeMapVols.put(numVol, new VolRegulier(numVol, destination.getText(), dateDepart, Integer.parseInt(nbRes.getText()), flotteCompagnie.get(0)));
+                        listeMapVols.put(numVol, new VolRegulier(numVol, destination.getText(), dateDepart, Integer.parseInt(nbRes.getText()), flotteCompagnie.get(randomRegularFlight[indexAvion])));
                     }
                     break;
                 case 3:
                     option = JOptionPane.showConfirmDialog(null, message, "AJOUT D'UN VOL", JOptionPane.OK_CANCEL_OPTION);
                     if(option == JOptionPane.OK_OPTION){
                         Date dateDepart = new Date(Integer.parseInt(jour.getText()), Integer.parseInt(mois.getText()), Integer.parseInt(annee.getText()));
-                        listeMapVols.put(numVol, new VolCharter(numVol, destination.getText(), dateDepart, Integer.parseInt(nbRes.getText()), flotteCompagnie.get(0)));
+                        listeMapVols.put(numVol, new VolCharter(numVol, destination.getText(), dateDepart, Integer.parseInt(nbRes.getText()), flotteCompagnie.get(2)));
                     }
                     break;
                 case 4:
                     option = JOptionPane.showConfirmDialog(null, message, "AJOUT D'UN VOL", JOptionPane.OK_CANCEL_OPTION);
                     if(option == JOptionPane.OK_OPTION){
                         Date dateDepart = new Date(Integer.parseInt(jour.getText()), Integer.parseInt(mois.getText()), Integer.parseInt(annee.getText()));
-                        listeMapVols.put(numVol, new VolPrive(numVol, destination.getText(), dateDepart, Integer.parseInt(nbRes.getText()), flotteCompagnie.get(0)));
+                        listeMapVols.put(numVol, new VolPrive(numVol, destination.getText(), dateDepart, Integer.parseInt(nbRes.getText()), flotteCompagnie.get(3)));
                     }
                     break;
                      

@@ -63,10 +63,11 @@ public class Vol implements Serializable, Comparable<Vol> {
     }
 
     public void setNbRes(int unNbRes) {
-        if (unNbRes >= 0) {
+        if (unNbRes >= 0 && unNbRes > this.unAvion.getNbPlaces()) {
             this.nbRes = unNbRes;
         } else {
-            System.out.println("nombre de réservations invalide");
+            this.nbRes = this.unAvion.getNbPlaces();
+            System.out.println("Nombre de réservations invalide");
         }
     }
 
