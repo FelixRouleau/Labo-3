@@ -16,9 +16,9 @@ public class Avion implements Serializable {
 
     // Constructeurs
 
-    // Avion() {
-    // // par défaut
-    // }
+    Avion() {// par défaut
+    
+    }
 
     Avion(String typeAvion, int maxPlaces, int rayonAction, int classeSiege) {
         this.modeleAvion = typeAvion;

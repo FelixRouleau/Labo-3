@@ -9,13 +9,13 @@ public class VolPrive extends Vol {
     private boolean danseuse;
     private boolean fumeur;
 
-    VolPrive(int numVol, Avion uAvion) {
-        super(numVol);
+    VolPrive(int numVol, Avion unAvion) {
+        super(numVol, unAvion);
         // this.unAvion = new Avion();
     }
 
     VolPrive(int numVol, String dest, Date depart, int nbRes, Avion unAvion) {
-        super(numVol, dest, depart, nbRes);
+        super(numVol, dest, depart, nbRes, unAvion);
         this.unAvion = unAvion;
         this.repasFourni = true;
         this.servicePayant = false;
@@ -89,18 +89,18 @@ public class VolPrive extends Vol {
     }
 
     public String getInfo() {
-        String infos = "";
-        infos += "\nRepas fourni : " + getRepasFourni();
-        infos += "\nService Payants : " + getServicePayant();
-        infos += "\nAlcool : " + getAlcool();
-        infos += "\nDivertissement : " + getDivertissement();
-        infos += "\nWi-Fi : " + getWiFi();
-        infos += "\nDanseuse : " + getDanseuse();
-        infos += "\nFumeur : " + getFumeur();
+        String infos = "Accomodations sur ce vol : \n";
+        infos += "Repas fourni : " + getRepasFourni();
+        infos += "    Service Payants : " + getServicePayant();
+        infos += "    Alcool : " + getAlcool();
+        infos += "    Divertissement : " + getDivertissement();
+        infos += "    Wi-Fi : " + getWiFi();
+        infos += "    Danseuse : " + getDanseuse();
+        infos += "    Fumeur : " + getFumeur() + "\n\n";
         return infos;
     }
 
     public String toString() {
-        return super.toString();// + unAvion.toString() + getInfo();
+        return super.toString() + getInfo();// + unAvion.toString() + getInfo();
     }
 }

@@ -10,13 +10,12 @@ public class VolBasPrix extends Vol {
     private boolean wiFi;
 
     VolBasPrix(int numVol, Avion unAvion) {
-        super(numVol);
+        super(numVol, unAvion);
         // this.unAvion = new Avion();
     }
 
     VolBasPrix(int numVol, String dest, Date depart, int nbRes, Avion unAvion) {
-        super(numVol, dest, depart, nbRes);
-        this.unAvion = unAvion;
+        super(numVol, dest, depart, nbRes, unAvion);
         this.repasFourni = false;
         this.servicePayant = true;
         this.alcool = true;
@@ -70,17 +69,17 @@ public class VolBasPrix extends Vol {
     }
 
     public String getInfo() {
-        String infos = "\n\nAccomodations sur ce vol : \n";
+        String infos = "Accomodations sur ce vol : ";
         infos += "\nRepas fourni : " + getRepasFourni();
-        infos += "\nService Payants : " + getServicePayant();
-        infos += "\nAlcool : " + getAlcool();
-        infos += "\nDivertissement : " + getDivertissement();
-        infos += "\nWi-Fi : " + getWiFi();
+        infos += "\tService Payants : " + getServicePayant();
+        infos += "\tAlcool : " + getAlcool();
+        infos += "\tDivertissement : " + getDivertissement();
+        infos += "\tWi-Fi : " + getWiFi() + "\n\n";
         return infos;
     }
 
     public String toString() {
-        return super.toString(); // + unAvion.toString() + getInfo();
+        return super.toString() + getInfo(); // + unAvion.toString() + getInfo();
     }
 
 }

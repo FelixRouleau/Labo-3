@@ -8,13 +8,13 @@ public class VolRegulier extends Vol {
     private boolean divertissement;
     private boolean wiFi;
 
-    VolRegulier(int numVol, Avion uAvion) {
-        super(numVol);
+    VolRegulier(int numVol, Avion unAvion) {
+        super(numVol, unAvion);
         // this.unAvion = new Avion();
     }
 
     VolRegulier(int numVol, String dest, Date depart, int nbRes, Avion unAvion) {
-        super(numVol, dest, depart, nbRes);
+        super(numVol, dest, depart, nbRes, unAvion);
         this.unAvion = unAvion;
         this.repasFourni = false;
         this.servicePayant = true;
@@ -70,17 +70,17 @@ public class VolRegulier extends Vol {
     }
 
     public String getInfo() {
-        String infos = "";
+        String infos = "Accomodations sur ce vol : ";
         infos += "\nRepas fourni : " + getRepasFourni();
-        infos += "\nService Payants : " + getServicePayant();
-        infos += "\nAlcool : " + getAlcool();
-        infos += "\nDivertissement : " + getDivertissement();
-        infos += "\nWi-Fi : " + getWiFi();
+        infos += "\tService Payants : " + getServicePayant();
+        infos += "\tAlcool : " + getAlcool();
+        infos += "\tDivertissement : " + getDivertissement();
+        infos += "\tWi-Fi : " + getWiFi() + "\n\n";
         return infos;
     }
 
     public String toString() {
-        return super.toString();// + unAvion.toString() + getInfo();
+        return super.toString() + getInfo();// + unAvion.toString() + getInfo();
     }
 
 }

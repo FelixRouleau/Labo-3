@@ -17,7 +17,7 @@ public class Main {
 
         int choix;
         creerFlotte();
-        chargerFichierPourUnMap();
+        chargerVols();
 
         do {
             choix = menu();
@@ -26,16 +26,16 @@ public class Main {
                     listerVols();
                     break;
                 case 2:
-                    // insererVol();
+                    ajouterVol();
                     break;
                 case 3:
-                    // retirerVol();
+                    retirerVol();
                     break;
                 case 4:
-                    // modifierDate();
+                    modifierDate();
                     break;
                 case 5:
-                    // reserverVol();
+                    reserverVol();
                     break;
                 case 6:
                     Utilitaires.sauvegarderFichierObjets(listeMapVols, FICHIER_VOLS_OBJ);
@@ -78,7 +78,7 @@ public class Main {
         }
     }
 
-    public static void chargerFichierPourUnMap() {
+    public static void chargerVols() {
         try {
             File f = new File(FICHIER_VOLS_OBJ);
 
@@ -87,17 +87,17 @@ public class Main {
             } else {
                 ArrayList<ArrayList<String>> listeAttributs = Utilitaires.chargerFichierTexte(FICHIER_VOLS_TXT,
                         ";");
-                listeAttributs.forEach((donneesLivre) -> {
+                listeAttributs.forEach((donneesVols) -> {
                     char typeVol;
                     int numVol;
                     String dest;
                     Date depart;
                     int nbRes;
-                    typeVol = donneesLivre.get(0).charAt(0);
-                    numVol = Integer.parseInt(donneesLivre.get(1));
-                    dest = donneesLivre.get(2);
-                    depart = convertDateFichierTxt(donneesLivre.get(3));
-                    nbRes = Integer.parseInt(donneesLivre.get(4));
+                    typeVol = donneesVols.get(0).charAt(0);
+                    numVol = Integer.parseInt(donneesVols.get(1));
+                    dest = donneesVols.get(2);
+                    depart = convertDateFichierTxt(donneesVols.get(3));
+                    nbRes = Integer.parseInt(donneesVols.get(4));
                     switch (typeVol) {
                         case 'R':
                             listeMapVols.put(numVol,
@@ -118,7 +118,7 @@ public class Main {
                     }
 
                 });
-                listeMapVols = ((TreeMap<Integer, Vol>) listeMapVols).descendingMap();//
+                
                 // Notre Map en ordre décroissant
             }
         } catch (Exception e) {
@@ -141,6 +141,8 @@ public class Main {
         Avion avionCharter = new Avion("Hawker 800xp", 8, 1, 1);
         Avion avionPrive = new Avion("Cessna Caravan", 14, 1, 0);
         Avion avionRegulierCourrierCourt = new Avion("Boeing 737 MAX 8", 210, 0, 2); // Avion pour la courte distance
+
+        // ajout des avions a l'arrayList flotteCompagnie
         flotteCompagnie.add(avionBasPrix);
         flotteCompagnie.add(avionRegulier);
         flotteCompagnie.add(avionCharter);
@@ -152,11 +154,144 @@ public class Main {
         sortie = new JTextArea(20, 80);
         sortie.setFont(new Font("monospace", Font.PLAIN, 12));
         sortie.append("\t\tLISTE DES VOLS\n\n");
-        sortie.append("#\tDESTINATION\t\tDÉPART\t# RÉSERVATIONS\n");
+        sortie.append("# VOL\tDESTINATION\t\tDÉPART\tNOMBRE DE RÉSERVATIONS\n\n");
 
     }
 
+    public static int nbVols;
+
     public static void listerVols() {
+        int choix;
+
+        String msg = "Sélectionner comment vous voulez afficher les vols\n";
+        msg += "1- Lister tous les vols\n2- Lister les vols bas prix\n3- Lister les vols réguliers\n4- Lister les vols charter\n5- Lister les vols privé\n6- Quitter";
+        msg += "\nEntrez votre choix";
+
+        
+        do {
+            choix = Integer
+                .parseInt(JOptionPane.showInputDialog(null, msg, "",
+                        JOptionPane.PLAIN_MESSAGE));
+        switch(choix) {
+            case 1:
+                sortie = new JTextArea();
+                listerTout();
+                JOptionPane.showMessageDialog(null, sortie, null, JOptionPane.PLAIN_MESSAGE);
+                break;
+            
+            case 2:
+                sortie = new JTextArea();
+                listerBasPrix();
+                JOptionPane.showMessageDialog(null, sortie, null, JOptionPane.PLAIN_MESSAGE);
+                break;
+            
+            case 3:
+                sortie = new JTextArea();
+                listerRegulier();
+                JOptionPane.showMessageDialog(null, sortie, null, JOptionPane.PLAIN_MESSAGE);
+                break;
+
+            case 4:
+                sortie = new JTextArea();
+                listerCharter();
+                JOptionPane.showMessageDialog(null, sortie, null, JOptionPane.PLAIN_MESSAGE);
+                break;
+
+            case 5:
+                sortie = new JTextArea();
+                listerPrive();
+                JOptionPane.showMessageDialog(null, sortie, null, JOptionPane.PLAIN_MESSAGE);
+                break;
+            
+            case 6:
+            break;
+
+            default :
+                afficherMsg("Choix invalide", "Erreur");
+            
+            
+        }
+    }while(choix !=6);
+    }
+
+    //Méthodes pour rechercher un vol avec son numéro qui est aussi la clé du HashMap
+
+    public static boolean rechercherVol(int numVol) {
+        boolean keyExist = false;
+
+        if(listeMapVols.containsKey(numVol)){
+            keyExist = true;
+        }else{
+            keyExist = false;
+        }
+        return keyExist;
+     }
+
+    // Début des méthodes pour lister tout les types de vols
+
+    public static void listerTout() {
+        nbVols = 0;
+        afficherEntete();
+            for (Integer cle : listeMapVols.keySet()) {
+                    sortie.append(listeMapVols.get(cle).toString());
+                    nbVols++;
+            }
+            sortie.append("Nombre de vols = " + nbVols);
+    }
+    
+
+    public static void listerBasPrix() {
+        nbVols = 0;
+        afficherEntete();
+            for (Integer cle : listeMapVols.keySet()) {
+                if(listeMapVols.get(cle) instanceof VolBasPrix){
+                    sortie.append(listeMapVols.get(cle).toString());
+                    nbVols++;
+                }
+            }
+            sortie.append("Nombre de vols = " + nbVols);
+    }
+
+    public static void listerRegulier() {
+        nbVols = 0;
+        afficherEntete();
+            for (Integer cle : listeMapVols.keySet()) {
+                if(listeMapVols.get(cle) instanceof VolRegulier){
+                    sortie.append(listeMapVols.get(cle).toString());
+                    nbVols++;
+                }
+            }
+            sortie.append("Nombre de vols = " + nbVols);
+    }
+
+    public static void listerCharter() {
+        nbVols = 0;
+        afficherEntete();
+            for (Integer cle : listeMapVols.keySet()) {
+                if(listeMapVols.get(cle) instanceof VolCharter){
+                    sortie.append(listeMapVols.get(cle).toString());
+                    nbVols++;
+                }
+            }
+            sortie.append("Nombre de vols = " + nbVols);
+    }
+
+    public static void listerPrive() {
+        nbVols = 0;
+        afficherEntete();
+            for (Integer cle : listeMapVols.keySet()) {
+                if(listeMapVols.get(cle) instanceof VolPrive){
+                    sortie.append(listeMapVols.get(cle).toString());
+                    nbVols++;
+                }
+            }
+            sortie.append("Nombre de vols = " + nbVols);
+    }
+
+    // Fin des méthodes pour lister les vols
+
+
+    public static void listerVolsRadioButtons() {
         int choix;
 
         choix = Integer
@@ -175,5 +310,156 @@ public class Main {
         }
 
     }
+
+    // Début des méthodes pour l'ajout d'un vol
+
+    public static void ajouterVol() {
+        int numVol;
+        int typeVol;
+        int option;
+        String msgTypeVol = "Quel type de vol voulez vous ajouter :\n";
+        msgTypeVol += "1- Bas prix\n2- Régulier\n3- Chartered\n4- Privé";
+
+        JTextField destination = new JTextField();
+        JTextField jour = new JTextField();
+        JTextField mois = new JTextField();
+        JTextField annee = new JTextField();
+        JTextField nbRes = new JTextField();
+        Object[] message = {"Destination",destination, 
+                            "Nombre de réservation",nbRes,
+                            "Date de départ\n",
+                            "Jour", jour,
+                            "Mois", mois,
+                            "Année", annee};
+
+        numVol = Integer.parseInt(JOptionPane.showInputDialog(null, "Entrez le numéro de vol à ajouter", "AJOUT D'UN VOL", JOptionPane.PLAIN_MESSAGE));
+
+        if(!rechercherVol(numVol)){
+            typeVol = Integer.parseInt(JOptionPane.showInputDialog(null, msgTypeVol, "AJOUT D'UN VOL", JOptionPane.PLAIN_MESSAGE));
+            switch(typeVol){
+                case 1:
+                    option = JOptionPane.showConfirmDialog(null, message, "AJOUT D'UN VOL", JOptionPane.OK_CANCEL_OPTION);
+                    if(option == JOptionPane.OK_OPTION){
+                        Date dateDepart = new Date(Integer.parseInt(jour.getText()), Integer.parseInt(mois.getText()), Integer.parseInt(annee.getText()));
+                        listeMapVols.put(numVol, new VolBasPrix(numVol, destination.getText(), dateDepart, Integer.parseInt(nbRes.getText()), flotteCompagnie.get(0)));
+                    }  
+                    break; 
+                case 2:
+                    option = JOptionPane.showConfirmDialog(null, message, "AJOUT D'UN VOL", JOptionPane.OK_CANCEL_OPTION);
+                    if(option == JOptionPane.OK_OPTION){
+                        Date dateDepart = new Date(Integer.parseInt(jour.getText()), Integer.parseInt(mois.getText()), Integer.parseInt(annee.getText()));
+                        listeMapVols.put(numVol, new VolRegulier(numVol, destination.getText(), dateDepart, Integer.parseInt(nbRes.getText()), flotteCompagnie.get(0)));
+                    }
+                    break;
+                case 3:
+                    option = JOptionPane.showConfirmDialog(null, message, "AJOUT D'UN VOL", JOptionPane.OK_CANCEL_OPTION);
+                    if(option == JOptionPane.OK_OPTION){
+                        Date dateDepart = new Date(Integer.parseInt(jour.getText()), Integer.parseInt(mois.getText()), Integer.parseInt(annee.getText()));
+                        listeMapVols.put(numVol, new VolCharter(numVol, destination.getText(), dateDepart, Integer.parseInt(nbRes.getText()), flotteCompagnie.get(0)));
+                    }
+                    break;
+                case 4:
+                    option = JOptionPane.showConfirmDialog(null, message, "AJOUT D'UN VOL", JOptionPane.OK_CANCEL_OPTION);
+                    if(option == JOptionPane.OK_OPTION){
+                        Date dateDepart = new Date(Integer.parseInt(jour.getText()), Integer.parseInt(mois.getText()), Integer.parseInt(annee.getText()));
+                        listeMapVols.put(numVol, new VolPrive(numVol, destination.getText(), dateDepart, Integer.parseInt(nbRes.getText()), flotteCompagnie.get(0)));
+                    }
+                    break;
+                     
+            }
+            afficherMsg(listeMapVols.get(numVol).ajouterVolTxt(), "Confirmation");
+        }else{
+            JOptionPane.showMessageDialog(null, "Le numéro de vol existe déja!", "ERREUR", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    
+
+     // Fin des méthodes pour l'ajout d'un vol
+
+
+     // Méthodes pour le retrait d'un vol
+
+     public static void retirerVol(){
+        int numVol;
+        int option;
+        String msg ="Voulez vous retirer ce vol? Vol numéro : ";
+
+        numVol = Integer.parseInt(JOptionPane.showInputDialog(null, "Entrez le numéro de vol retirer", "AJOUT D'UN VOL", JOptionPane.PLAIN_MESSAGE));
+        if(rechercherVol(numVol)){
+            msg += listeMapVols.get(numVol).getNumVol();
+            option = JOptionPane.showConfirmDialog(null, msg, "Confirmation", JOptionPane.OK_CANCEL_OPTION);
+            if(option == JOptionPane.OK_OPTION){
+                afficherMsg(listeMapVols.get(numVol).retireVolTxt(), "Confirmation");
+                listeMapVols.remove(numVol);
+            }            
+        } else {
+            afficherMsg("Numéro de vol inexistant", "Erreur");
+        }
+     }
+
+
+     // Méthodes pour modifier la date de départ d'un vol
+
+     public static void modifierDate() {
+        JTextField jour = new JTextField();
+        JTextField mois = new JTextField();
+        JTextField annee = new JTextField();
+        Object[] message = {"Nouvelle date de départ\n",
+        "Jour", jour,
+        "Mois", mois,
+        "Année", annee};
+        int numVol;
+        int option;
+
+
+        numVol = Integer.parseInt(JOptionPane.showInputDialog(null, "Entrez le numéro de vol où vous désirez changez la date.", "AJOUT D'UN VOL", JOptionPane.PLAIN_MESSAGE));
+        if(rechercherVol(numVol)){
+            option = JOptionPane.showConfirmDialog(null, message, "AJOUT D'UN VOL", JOptionPane.OK_CANCEL_OPTION);
+            if(option == JOptionPane.OK_OPTION){
+                Date dateDepart = new Date(Integer.parseInt(jour.getText()), Integer.parseInt(mois.getText()), Integer.parseInt(annee.getText()));
+            listeMapVols.get(numVol).setDepart(dateDepart);
+            afficherMsg(listeMapVols.get(numVol).modifierDateTxt(), "Confirmation");
+             }
+        }
+    }
+
+    //Méthodes pour prendre une réservation sur un vol
+
+    public static void reserverVol(){
+        int numVol;
+        int option;
+        int nbReserve;
+        String msg ="Voulez vous réserver ce vol? Vol numéro : ";
+
+        numVol = Integer.parseInt(JOptionPane.showInputDialog(null, "Entrez le numéro de vol où vous désirez réserver.", "RÉSERVATION", JOptionPane.PLAIN_MESSAGE));
+        if(rechercherVol(numVol)){
+            msg += listeMapVols.get(numVol).getNumVol();
+            msg += "\nIl reste " + nbPlacesRestantes(numVol) + " places.";
+            option = JOptionPane.showConfirmDialog(null, msg, "Confirmation", JOptionPane.OK_CANCEL_OPTION);
+            if(option == JOptionPane.OK_OPTION){
+                nbReserve = Integer.parseInt(JOptionPane.showInputDialog(null, "Combien de siège voulez vous réservé?", "RÉSERVATION", JOptionPane.PLAIN_MESSAGE));
+                if(nbReserve <= nbPlacesRestantes(numVol)){
+                    listeMapVols.get(numVol).setNbRes(nbReserve + listeMapVols.get(numVol).nbRes);
+                afficherMsg(listeMapVols.get(numVol).reserverVolTxt(nbReserve), "Confirmation");
+                }else{
+                    afficherMsg("Il ne reste pas assez de place", "Erreur");
+                }
+                
+                }            
+            }else {
+            afficherMsg("Numéro de vol inexistant", "Erreur");
+            }
+        }
+
+    public static int nbPlacesRestantes(int numVol) {
+       int nbPlacesRestantes;
+
+       nbPlacesRestantes = listeMapVols.get(numVol).getAvion().getNbPlaces() - listeMapVols.get(numVol).getNbRes();
+       return nbPlacesRestantes;
+        
+
+    }
+
 
 }

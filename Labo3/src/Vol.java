@@ -8,17 +8,19 @@ public class Vol implements Serializable, Comparable<Vol> {
     public static int nbVols = 0;
 
     // attributs d'instance
-    private int numVol, nbRes;
-    private String destination;
-    private Date depart;
+    protected int numVol, nbRes;
+    protected String destination;
+    protected Date depart;
+    protected Avion unAvion;
 
     // constructeurs
-    Vol(int numVol) {
+    Vol(int numVol, Avion unAvion) {
         this.numVol = numVol;
         nbVols++;
     }
 
-    Vol(int numVol, String dest, Date depart, int nbRes) {
+    Vol(int numVol, String dest, Date depart, int nbRes, Avion unAvion) {
+        this.unAvion = unAvion;
         this.numVol = numVol;
         setDestination(dest);
         this.depart = depart;
@@ -41,6 +43,10 @@ public class Vol implements Serializable, Comparable<Vol> {
 
     public int getNbRes() {
         return this.nbRes;
+    }
+
+    public Avion getAvion() {
+        return this.unAvion;
     }
 
     // mutateurs
@@ -96,15 +102,19 @@ public class Vol implements Serializable, Comparable<Vol> {
     }
 
     public String retireVolTxt() {
-        return this.destination + "  " + this.getDepart() + "  " + this.nbRes;
+        return "Le vol numéro "+ this.getNumVol()+  " à destination de " + this.getDestination() + " a été retiré.";
     }
 
     public String modifierDateTxt() {
-        return this.destination + "  " + this.getDepart();
+        return "La date de départ pour le vol numéro "+ this.getNumVol()+  " à été modifié a " + this.getDepart();
     }
 
-    public String reserverVolTxt() {
-        return this.destination + "  " + this.getDepart();
+    public String ajouterVolTxt() {
+        return "Le vol numéro "+ this.getNumVol()+  " à destination de " + this.getDestination() + " a été ajouté.";
+    }
+
+    public String reserverVolTxt(int nbReserve) {
+        return "Vous avez pris " + nbReserve + " pour le vol numéro "+ this.getNumVol()+  " à destination de " + this.getDestination();
     }
 
     @Override
