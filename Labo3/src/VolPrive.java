@@ -95,7 +95,7 @@ public class VolPrive extends Vol {
         infos += "    Alcool : " + getAlcool();
         infos += "    Divertissement : " + getDivertissement();
         infos += "    Wi-Fi : " + getWiFi();
-        infos += "    Danseuse : " + getDanseuse();
+        infos += "    Danseurs : " + getDanseuse();
         infos += "    Fumeur : " + getFumeur() + "\n\n";
         return infos;
     }
