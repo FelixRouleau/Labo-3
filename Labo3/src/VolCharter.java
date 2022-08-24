@@ -8,14 +8,13 @@ public class VolCharter extends Vol {
     private boolean divertissement;
     private boolean wiFi;
 
-    VolCharter(int numVol, Avion unAvion) {
-        super(numVol, unAvion);
+    VolCharter(int numVol) {
+        super(numVol);
         // this.unAvion = new Avion();
     }
 
     VolCharter(int numVol, String dest, Date depart, int nbRes, Avion unAvion) {
         super(numVol, dest, depart, nbRes, unAvion);
-        this.unAvion = unAvion;
         this.repasFourni = true;
         this.servicePayant = false;
         this.alcool = true;
@@ -24,9 +23,9 @@ public class VolCharter extends Vol {
 
     }
 
-    public Avion getAvion() {
-        return this.unAvion;
-    }
+    // public Avion getAvion() {
+    // return this.unAvion;
+    // }
 
     public String getRepasFourni() {
         if (!this.repasFourni) {

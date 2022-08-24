@@ -1,21 +1,20 @@
 public class VolRegulier extends Vol {
 
     // Attributs d'instance
-    private Avion unAvion;
+    // private Avion unAvion;
     private boolean repasFourni;
     private boolean servicePayant;
     private boolean alcool;
     private boolean divertissement;
     private boolean wiFi;
 
-    VolRegulier(int numVol, Avion unAvion) {
-        super(numVol, unAvion);
+    VolRegulier(int numVol) {
+        super(numVol);
         // this.unAvion = new Avion();
     }
 
     VolRegulier(int numVol, String dest, Date depart, int nbRes, Avion unAvion) {
         super(numVol, dest, depart, nbRes, unAvion);
-        this.unAvion = unAvion;
         this.repasFourni = false;
         this.servicePayant = true;
         this.alcool = true;
@@ -24,9 +23,9 @@ public class VolRegulier extends Vol {
 
     }
 
-    public Avion getAvion() {
-        return this.unAvion;
-    }
+    // public Avion getAvion() {
+    // return this.unAvion;
+    // }
 
     public String getRepasFourni() {
         if (!this.repasFourni) {

@@ -9,8 +9,8 @@ public class VolBasPrix extends Vol {
     private boolean divertissement;
     private boolean wiFi;
 
-    VolBasPrix(int numVol, Avion unAvion) {
-        super(numVol, unAvion);
+    VolBasPrix(int numVol) {
+        super(numVol);
         // this.unAvion = new Avion();
     }
 
@@ -23,9 +23,9 @@ public class VolBasPrix extends Vol {
         this.wiFi = false;
     }
 
-    public Avion getAvion() {
-        return this.unAvion;
-    }
+    // public Avion getAvion() {
+    // return this.unAvion;
+    // }
 
     public String getRepasFourni() {
         if (!this.repasFourni) {

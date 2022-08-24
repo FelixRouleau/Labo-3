@@ -14,17 +14,17 @@ public class Vol implements Serializable, Comparable<Vol> {
     protected Avion unAvion;
 
     // constructeurs
-    Vol(int numVol, Avion unAvion) {
+    Vol(int numVol) {
         this.numVol = numVol;
         nbVols++;
     }
 
     Vol(int numVol, String dest, Date depart, int nbRes, Avion unAvion) {
-        this.unAvion = unAvion;
         this.numVol = numVol;
         setDestination(dest);
         this.depart = depart;
         setNbRes(nbRes);
+        this.unAvion = unAvion;
         nbVols++;
     }
 
@@ -63,10 +63,9 @@ public class Vol implements Serializable, Comparable<Vol> {
     }
 
     public void setNbRes(int unNbRes) {
-        if (unNbRes >= 0 && unNbRes > this.unAvion.getNbPlaces()) {
+        if (unNbRes >= 0) {
             this.nbRes = unNbRes;
         } else {
-            this.nbRes = this.unAvion.getNbPlaces();
             System.out.println("Nombre de réservations invalide");
         }
     }
@@ -103,19 +102,20 @@ public class Vol implements Serializable, Comparable<Vol> {
     }
 
     public String retireVolTxt() {
-        return "Le vol numéro "+ this.getNumVol()+  " à destination de " + this.getDestination() + " a été retiré.";
+        return "Le vol numéro " + this.getNumVol() + " à destination de " + this.getDestination() + " a été retiré.";
     }
 
     public String modifierDateTxt() {
-        return "La date de départ pour le vol numéro "+ this.getNumVol()+  " à été modifié a " + this.getDepart();
+        return "La date de départ pour le vol numéro " + this.getNumVol() + " à été modifié a " + this.getDepart();
     }
 
     public String ajouterVolTxt() {
-        return "Le vol numéro "+ this.getNumVol()+  " à destination de " + this.getDestination() + " a été ajouté.";
+        return "Le vol numéro " + this.getNumVol() + " à destination de " + this.getDestination() + " a été ajouté.";
     }
 
     public String reserverVolTxt(int nbReserve) {
-        return "Vous avez pris " + nbReserve + " pour le vol numéro "+ this.getNumVol()+  " à destination de " + this.getDestination();
+        return "Vous avez pris " + nbReserve + " pour le vol numéro " + this.getNumVol() + " à destination de "
+                + this.getDestination();
     }
 
     @Override

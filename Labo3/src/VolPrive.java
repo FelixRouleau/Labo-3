@@ -9,14 +9,13 @@ public class VolPrive extends Vol {
     private boolean danseuse;
     private boolean fumeur;
 
-    VolPrive(int numVol, Avion unAvion) {
-        super(numVol, unAvion);
+    VolPrive(int numVol) {
+        super(numVol);
         // this.unAvion = new Avion();
     }
 
     VolPrive(int numVol, String dest, Date depart, int nbRes, Avion unAvion) {
         super(numVol, dest, depart, nbRes, unAvion);
-        this.unAvion = unAvion;
         this.repasFourni = true;
         this.servicePayant = false;
         this.alcool = true;
@@ -27,9 +26,9 @@ public class VolPrive extends Vol {
 
     }
 
-    public Avion getAvion() {
-        return this.unAvion;
-    }
+    // public Avion getAvion() {
+    // return this.unAvion;
+    // }
 
     public String getRepasFourni() {
         if (!this.repasFourni) {
